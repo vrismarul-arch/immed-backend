@@ -18,11 +18,11 @@ const blogSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  category: {
-    type: String,
-    required: true,
-    enum: ['Technology', 'Business', 'Design', 'Marketing', 'Career', 'News', 'Tutorial'],
-  },
+ category: {
+      type: String,
+      required: true,
+      trim: true,
+    },
   tags: [String],
   featuredImage: {
     type: String,

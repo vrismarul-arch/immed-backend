@@ -9,7 +9,10 @@ import jobRoutes from "./routes/jobRoutes.js";
 import applicationRoutes from "./routes/applicationRoutes.js";
 import blogRoutes from "./routes/blogRoutes.js";
 import portfolioRoutes from "./routes/portfolioRoutes.js";
-import growthSnapshotRoutes from "./routes/growthSnapshotRoutes.js"; // FIXED FILE PATH
+import growthSnapshotRoutes from "./routes/growthSnapshotRoutes.js";
+import literatureRoutes from "./routes/literatureRoutes.js"; // NEW
+import authRoutes from "./routes/authRoutes.js"; // NEW
+import userRoutes from "./routes/userRoutes.js"; // NEW
 
 dotenv.config();
 
@@ -33,7 +36,10 @@ app.use("/api/jobs", jobRoutes);
 app.use("/api/applications", applicationRoutes);
 app.use("/api/blogs", blogRoutes);
 app.use("/api/portfolio", portfolioRoutes);
-app.use("/api/growth-snapshot", growthSnapshotRoutes); // moved after json parser
+app.use("/api/growth-snapshot", growthSnapshotRoutes);
+app.use("/api/literature", literatureRoutes); // NEW
+app.use("/api/auth", authRoutes); // NEW
+app.use("/api/users", userRoutes); // NEW
 
 // Test route
 app.get("/", (req, res) => {
@@ -47,11 +53,14 @@ app.use((err, req, res, next) => {
   if (err.code === "LIMIT_FILE_SIZE") {
     return res.status(400).json({
       success: false,
-      message: "File too large. Max size is 5MB",
+      message: "File too large. Max size is 5MB for images, 20MB for PDFs",
     });
   }
 
-  if (err.message === "Only image files are allowed") {
+  if (
+    err.message === "Only image files are allowed" ||
+    err.message === "Only PDF files are allowed"
+  ) {
     return res.status(400).json({
       success: false,
       message: err.message,
